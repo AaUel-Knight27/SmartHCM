@@ -1,0 +1,51 @@
+{% extends "labors/base.html" %}
+
+{% block content %}
+<h2>{{ active_tab|title }} Employees</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Employee Code</th>
+            <th>Employee Name</th>
+            <th>Job Position</th>
+            <th>Department</th>
+            <th>Salary (Birr)</th>
+            <th>Telephone</th>
+            <th>Hire Date</th>
+            {% if active_tab == "PERMANENT" %}
+                <th>Fired Date</th>
+                <th>Terminated</th>
+            {% elif active_tab == "CONTRACT" %}
+                <th>Contract Date</th>
+            {% elif active_tab == "TEMPORARY" %}
+                <th>Logs</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for emp in employees %}
+        <tr>
+            <td>{{ emp.employee_code }}</td>
+            <td>{{ emp.name }}</td>
+            <td>{{ emp.job_position }}</td>
+            <td>{{ emp.department }}</td>
+            <td>{{ emp.salary_birr }}</td>
+            <td>{{ emp.telephone }}</td>
+            <td>{{ emp.hire_date }}</td>
+            {% if active_tab == "PERMANENT" %}
+                <td>{{ emp.fired_date }}</td>
+                <td>{% if emp.terminated %}❌Terminated {% else %} Not Terminated✅{% endif %}</td>
+            {% elif active_tab == "CONTRACT" %}
+                <td>{{ emp.contract_date }}</td>
+            {% elif active_tab == "TEMPORARY" %}
+                <td><a href="{% url 'temporary_logs' emp.id %}" class="btn btn-sm btn-primary">View Logs</a></td>
+            {% endif %}
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="10">No employees found.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
